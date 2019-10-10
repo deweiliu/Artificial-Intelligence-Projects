@@ -1,0 +1,13 @@
+image_directory: "../section1_images"
+objects: 
+- cherry
+- flower
+- banana
+- pear
+- envelope
+- golfclub
+- pencil
+- wineglass
+student_number: 40216004
+min_index: 1
+max_index: 20
