@@ -1,3 +1,9 @@
+# Run the file to convert
+# all pgm files in raw format genearted by GIMP
+# into
+# csv files delimited by TAB in text format
+
+
 
 import numpy
 from PIL import Image
@@ -5,8 +11,9 @@ import os
 import yaml
 
 
-def image_list(configuration):
-    image_list=list();
+
+def image_list(configuration):    
+    image_list=list()    
     stduent=str(configuration["student_number"])
     for each_object in configuration["objects"]:
         for index in range(configuration["min_index"],configuration["max_index"]+1):
@@ -22,12 +29,9 @@ def image_list(configuration):
 def read_image(pgm_image):
     if(os.path.exists(pgm_image)):
         image=Image.open(pgm_image)
-        print(type(image))
-        print(image)
         return numpy.array(image)
     else:
         raise Exception("File %s does not exist"%(pgm_image))
-        
 
 
 def transform_ndarray_to_01(ndarray):
@@ -57,14 +61,30 @@ with open("configuration.yml", 'r') as f:
         print(exc)
 
 
-
+# Get a list of pgm image paths
 images=image_list(configuration)
+
+# For each path
 for image in images:
-    image=images[50]
-    print(image)
+
+    # Print the image path
+    print("Converting image: %s"%image)
+
+    # Read the image data
     ndarray=read_image(image)
+
+    # Transform all pixel with value 128 or higher to 0, other values to 1
     ndarray=transform_ndarray_to_01(ndarray)
+
+    # Get the path of the file that should be generated
     filename, file_extension = os.path.splitext(image)
     csv_file=filename+".csv"
-    save_to_file(csv_file,ndarray)
+
+    # Write the data into the file
+    print("Writing the following data into file %s"%csv_file)
     print(ndarray)
+    save_to_file(csv_file,ndarray)
+    print("File %s generated"%csv_file)
+    print("----------------------------------------------------------------------\n")
+
+print("\n%d csv files generated. Done"%len(images))
