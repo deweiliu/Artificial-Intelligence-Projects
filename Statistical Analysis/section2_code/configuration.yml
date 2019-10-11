@@ -11,3 +11,26 @@ objects:
 student_number: 40216004
 min_index: 1
 max_index: 20
+features:
+- label #The true name of the object in the image (represented by one of the 8 object names above). The label is not a true feature, and should not be used as a feature for statistical tests or during model training.
+- index #The index of this image instance (a number from 1 to 20). The index is not a true feature, and should not be used as a feature for statistical tests or during model training.
+- nr_pix # The number of black pixels in the image.
+- height # The vertical distance between the topmost and bottommost black pixels in the image.
+- width # The horizontal distance between the leftmost and rightmost black pixels in the image.
+- span # The maximum Euclidean distance between any two black pixels in the image.
+- rows_with_5 # Number of rows with five or more black pixels
+- cols_with_5 # Number of columns with five or more black pixels
+- neigh1 # Number of black pixels with exactly 1 neighbouring pixel
+- neigh5 # Number of black pixels with 5 or more neighbours
+- left2tile # The number of unique 2-tiles in the image where the leftmost two entries are black and the rightmost two entries are white: ◧. Tiles may overlap.
+- right2tile # The number of unique 2-tiles in the image where the rightmost two entries are black and the leftmost two entries are white: ◨.
+- verticalness # The sum of the previous two features, divided by the number of black pixels in the image.
+- top2tile # The number of unique 2-tiles in the image where the top two entries are black and the bottom two entries are white.
+- bottom2tile # The number of unique 2-tiles in the image where the bottom two entries are black and the top two entries are white.
+- horizontalness # The sum of the previous two features, divided by the number of black pixels in the image.
+- feature15 # Define a custom feature using 3-tiles. Explain and justify the rationale for your feature.
+- feature16 # Define another custom feature using 3-tiles. Explain and justify the rationale for your feature.
+- nr_regions # Two black pixels A and B are connected if they are neighbours of each other, or if a black pixel neighbour of A is connected to B (this definition is actually symmetric); a connected region is a maximal set of black pixels which are connected to each other; this feature is the number of connected regions in the image.
+- nr_eyes # A region of white pixels is an eye if there is a ring of black pixels surrounding it which are all connected (i.e. they form a chain of neighbours). This feature is the number of eyes in the image. Note that while two neighbouring black pixels are necessarily in the same region, two neighbouring white pixels are not necessarily in the same eye.
+- hollowness # This is the number of white pixels which are in eyes divided by the number of black pixels in the image.
+- feature20 # Design any other feature you like. Justify why you think it may be a useful feature for distinguishing between object doodles.

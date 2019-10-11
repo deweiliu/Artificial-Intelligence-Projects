@@ -1,5 +1,6 @@
 from python_modules.image_list import image_list
 import yaml
+from python_modules.instance import Instance
 
 with open("configuration.yml", 'r') as f:
     try:
@@ -9,5 +10,7 @@ with open("configuration.yml", 'r') as f:
 
 images=image_list(configuration)
 print(images)
+instance = Instance()
+
 for image in images:
     pass
