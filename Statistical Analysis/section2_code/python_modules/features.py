@@ -150,10 +150,10 @@ class Neigh1(Feature):
         result=0
         for each_row in range(self.rows):
             for each_column in range(self.columns):
+                pixel=(each_row,each_column)
 
                 # if it is a black pixel
-                if(Feature.parse_value(self.image_data[each_row,each_column])):
-                    pixel=(each_row,each_column)
+                if(is_black(pixel,self.image_data)):
 
                     # find its neighbours which are also black
                     same_neighbours=find_same_neighbours(pixel,self.image_data)
@@ -174,10 +174,10 @@ class Neigh5(Feature):
         result=0
         for each_row in range(self.rows):
             for each_column in range(self.columns):
+                pixel=(each_row,each_column)
 
                 # if it is a black pixel
-                if(Feature.parse_value(self.image_data[each_row,each_column])):
-                    pixel=(each_row,each_column)
+                if(is_black(pixel,self.image_data)):
 
                     # find its neighbours which are also black
                     same_neighbours=find_same_neighbours(pixel,self.image_data)
