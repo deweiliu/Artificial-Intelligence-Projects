@@ -1,3 +1,4 @@
+from python_modules.utilities import *
 import numpy
 class Feature(object):
     def __init__(self,feature_name,features_dict,image_data):
@@ -38,7 +39,7 @@ class NrPix(Feature):
                 if(Feature.parse_value( self.image_data[each_row][each_column])):
                     result+=1
 
-        return result;
+        return result
     @staticmethod
     def get_feature_name():
         return 'nr_pix'
@@ -58,7 +59,7 @@ class Height(Feature):
                     ending_row=each_row
                     break
             
-        return ending_row-starting_row;
+        return ending_row-starting_row
     @staticmethod
     def get_feature_name():
         return 'height'
@@ -67,22 +68,24 @@ class Width(Feature):
     def __init__(self,features_dict,image_data):
         super().__init__(Width.get_feature_name(),features_dict,image_data)
     def compute_value(self):
-        starting_row=-1
-        ending_row=-1
-        for each_row in range(self.rows):
-            for each_column in range(self.columns):
+        starting_column=-1
+        ending_column=-1
+        for each_column in range(self.columns):
+            for each_row in range(self.rows):
+    
                 if(Feature.parse_value( self.image_data[each_row][each_column])):
-                    if(starting_row==-1):
-                        starting_row=each_row
-                    ending_row=each_row
+                    if(starting_column==-1):
+                        starting_column=each_column
+                    ending_column=each_column
                     break
             
-        return ending_row-starting_row;
+        return ending_column-starting_column
     @staticmethod
     def get_feature_name():
         return 'width'
 
 class Span(Feature):
+    # todo
     def __init__(self,features_dict,image_data):
         super().__init__(Span.get_feature_name(),features_dict,image_data)
     def compute_value(self):
@@ -96,7 +99,7 @@ class Span(Feature):
                     ending_row=each_row
                     break
             
-        return ending_row-starting_row;
+        return ending_row-starting_row
     @staticmethod
     def get_feature_name():
         return 'span'
@@ -105,17 +108,17 @@ class RowsWith5(Feature):
     def __init__(self,features_dict,image_data):
         super().__init__(RowsWith5.get_feature_name(),features_dict,image_data)
     def compute_value(self):
-        starting_row=-1
-        ending_row=-1
+        result=0
         for each_row in range(self.rows):
+            black_pixels_in_this_row=0
             for each_column in range(self.columns):
                 if(Feature.parse_value( self.image_data[each_row][each_column])):
-                    if(starting_row==-1):
-                        starting_row=each_row
-                    ending_row=each_row
-                    break
+                    black_pixels_in_this_row+=1
+                    if(black_pixels_in_this_row>=5):
+                        result+=1
+                        break
             
-        return ending_row-starting_row;
+        return result
     @staticmethod
     def get_feature_name():
         return 'rows_with_5'
@@ -124,17 +127,18 @@ class ColsWith5(Feature):
     def __init__(self,features_dict,image_data):
         super().__init__(ColsWith5.get_feature_name(),features_dict,image_data)
     def compute_value(self):
-        starting_row=-1
-        ending_row=-1
-        for each_row in range(self.rows):
-            for each_column in range(self.columns):
+        result=0
+        for each_column in range(self.columns):
+            black_pixels_in_this_column=0
+            for each_row in range(self.rows):
+    
                 if(Feature.parse_value( self.image_data[each_row][each_column])):
-                    if(starting_row==-1):
-                        starting_row=each_row
-                    ending_row=each_row
-                    break
+                    black_pixels_in_this_column+=1
+                    if(black_pixels_in_this_column>=5):
+                        result+=1
+                        break
             
-        return ending_row-starting_row;
+        return result
     @staticmethod
     def get_feature_name():
         return 'cols_with_5'
@@ -143,17 +147,22 @@ class Neigh1(Feature):
     def __init__(self,features_dict,image_data):
         super().__init__(Neigh1.get_feature_name(),features_dict,image_data)
     def compute_value(self):
-        starting_row=-1
-        ending_row=-1
+        result=0
         for each_row in range(self.rows):
             for each_column in range(self.columns):
-                if(Feature.parse_value( self.image_data[each_row][each_column])):
-                    if(starting_row==-1):
-                        starting_row=each_row
-                    ending_row=each_row
-                    break
-            
-        return ending_row-starting_row;
+
+                # if it is a black pixel
+                if(Feature.parse_value(self.image_data[each_row,each_column])):
+                    pixel=(each_row,each_column)
+
+                    # find its neighbours which are also black
+                    same_neighbours=find_same_neighbours(pixel,self.image_data)
+                    
+                    # if there is only one black neighbouring pixel
+                    if(len(same_neighbours)==1):
+                        result+=1
+        return result
+        
     @staticmethod
     def get_feature_name():
         return 'neigh1'
