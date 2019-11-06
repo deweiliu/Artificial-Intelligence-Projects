@@ -162,7 +162,7 @@ class Neigh1(Feature):
                     if(len(same_neighbours)==1):
                         result+=1
         return result
-        
+
     @staticmethod
     def get_feature_name():
         return 'neigh1'
@@ -171,17 +171,22 @@ class Neigh5(Feature):
     def __init__(self,features_dict,image_data):
         super().__init__(Neigh5.get_feature_name(),features_dict,image_data)
     def compute_value(self):
-        starting_row=-1
-        ending_row=-1
+        result=0
         for each_row in range(self.rows):
             for each_column in range(self.columns):
-                if(Feature.parse_value( self.image_data[each_row][each_column])):
-                    if(starting_row==-1):
-                        starting_row=each_row
-                    ending_row=each_row
-                    break
-            
-        return ending_row-starting_row;
+
+                # if it is a black pixel
+                if(Feature.parse_value(self.image_data[each_row,each_column])):
+                    pixel=(each_row,each_column)
+
+                    # find its neighbours which are also black
+                    same_neighbours=find_same_neighbours(pixel,self.image_data)
+                    
+                    # if there is only one black neighbouring pixel
+                    if(len(same_neighbours)>=5):
+                        result+=1
+        return result
+
     @staticmethod
     def get_feature_name():
         return 'neigh5'
