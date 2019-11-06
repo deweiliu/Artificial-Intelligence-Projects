@@ -21,6 +21,7 @@ with open(destination_file,'w') as file:
     all_data=list()
 
     label_names=configuration['labels']
+    label_names.sort()
     for label_name in label_names:
         label=Label(label_name,configuration,file)
         all_data.append(label.get_label_dict())
