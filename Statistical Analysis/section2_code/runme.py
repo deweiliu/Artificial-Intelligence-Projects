@@ -1,3 +1,4 @@
+import os 
 from python_modules.image_list import image_list
 import yaml
 from python_modules.image_list import image_list
@@ -8,11 +9,22 @@ with open("configuration.yml", 'r') as f:
     except yaml.YAMLError as exc:
         print(exc)
 
-all_data=list()
+destination_file=os.path.join(configuration['destination_folder'],"%s_features.csv"%configuration['student_number'])
+with open(destination_file,'w') as file:
+    # Write header
+    header=['label','index']+configuration['features']
 
-label_names=configuration['labels']
-for label_name in label_names:
-    label=Label(label_name,configuration)
-    all_data.append(label.get_label_dict())
+    file.writelines('\t'.join(header)+'\n')
+
+
+    # Write features
+    all_data=list()
+
+    label_names=configuration['labels']
+    for label_name in label_names:
+        label=Label(label_name,configuration,file)
+        all_data.append(label.get_label_dict())
+
+
 
 print("All data:\n",all_data)
