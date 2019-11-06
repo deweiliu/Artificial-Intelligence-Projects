@@ -1,10 +1,12 @@
+import os 
+import numpy 
 from python_modules.features import *
 class Instance():
     
     def __init__(self, label,index,configuration):
         super().__init__()
         self.configuration=configuration
-        file_name=Instance.get_file_name(label,index,configuration)
+        file_name=Instance.get_file_path(label,index,configuration)
         self.image_data=Instance.get_image_data(file_name)
 
 
@@ -34,9 +36,21 @@ class Instance():
 
         return self.result
     @staticmethod
-    def get_file_name(label,index,configuration):
-        return ''
+    def get_file_path(label,index,configuration):
+        file_name=''
+        file_name+=str(configuration['student_number'])
+        file_name+='_'
+        file_name+=label
+        file_name+='_'
+        file_name+="{0:0=2d}".format(index)
+        file_name+='.csv'
+
+        file_dir=configuration['image_directory']
+        file_path=os.path.join(file_dir,file_name)
+
+
+        return file_path
     @staticmethod
     def get_image_data(file_name):
-        #todo: 
-        return dict()
+        image_data=numpy.genfromtxt(file_name, delimiter='\t')
+        return image_data
