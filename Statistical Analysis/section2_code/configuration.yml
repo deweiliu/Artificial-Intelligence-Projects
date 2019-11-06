@@ -1,5 +1,5 @@
 image_directory: "../section1_images"
-objects: 
+labels: 
 - cherry
 - flower
 - banana
@@ -10,12 +10,11 @@ objects:
 - wineglass
 student_number: 40216004
 min_index: 1
-max_index: 20
+max_index: 2
 features:
-- label #The true name of the object in the image (represented by one of the 8 object names above). The label is not a true feature, and should not be used as a feature for statistical tests or during model training.
-- index #The index of this image instance (a number from 1 to 20). The index is not a true feature, and should not be used as a feature for statistical tests or during model training.
 - nr_pix # The number of black pixels in the image.
 - height # The vertical distance between the topmost and bottommost black pixels in the image.
+aa:
 - width # The horizontal distance between the leftmost and rightmost black pixels in the image.
 - span # The maximum Euclidean distance between any two black pixels in the image.
 - rows_with_5 # Number of rows with five or more black pixels
