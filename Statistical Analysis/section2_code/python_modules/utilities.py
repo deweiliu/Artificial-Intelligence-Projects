@@ -1,3 +1,5 @@
+import numpy
+
 def is_black(pixel,image_data):
 
     try:
@@ -31,7 +33,7 @@ def is_inbound(pixel,shape):
             return True
     return False
 
-def find_neighbours(pixel,shape):
+def find_neighbours(pixel):
     x,y=pixel
     result =list()
 
@@ -55,7 +57,7 @@ def find_neighbours(pixel,shape):
 
     neighbour=(x+1,y)
     result.append(neighbour)
-    
+
     neighbour=(x+1,y+1)
     result.append(neighbour)
 
@@ -72,3 +74,15 @@ def find_same_neighbours(pixel,image_data):
     
     return result
 
+def get_tile(pixel,n,image_data):
+    result=list()
+    x,y=pixel
+    for each_row in range(x,x+n):
+        for each_column in range(y,y+n):
+            if(is_black((each_row,each_column),image_data)):
+                result.append('1')
+            else:
+                result.append('0')
+    result=numpy.array(result)
+    
+    return result.reshape(n,n)

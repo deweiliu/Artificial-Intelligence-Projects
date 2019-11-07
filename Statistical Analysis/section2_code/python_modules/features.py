@@ -195,17 +195,19 @@ class Left2Tile(Feature):
     def __init__(self,features_dict,image_data):
         super().__init__(Left2Tile.get_feature_name(),features_dict,image_data)
     def compute_value(self):
-        starting_row=-1
-        ending_row=-1
-        for each_row in range(self.rows):
-            for each_column in range(self.columns):
-                if(Feature.parse_value( self.image_data[each_row][each_column])):
-                    if(starting_row==-1):
-                        starting_row=each_row
-                    ending_row=each_row
-                    break
-            
-        return ending_row-starting_row;
+        result=0
+        for each_row in range(-1,self.rows+1):
+            for each_column in range(-1,self.columns+1):
+                pixel=(each_row,each_column)
+                tile=get_tile(pixel,2,self.image_data)
+                if(is_black((0,0),tile)):
+                    if(is_black((1,0),tile)):
+                        if(not is_black((0,1),tile)):
+                            if(not is_black((1,1),tile)):
+                                result+=1
+
+        return result
+        
     @staticmethod
     def get_feature_name():
         return 'left2tile'
