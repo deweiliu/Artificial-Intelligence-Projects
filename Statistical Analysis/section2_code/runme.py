@@ -1,5 +1,17 @@
 import os 
-import yaml
+try: 
+    # This program needs to use YAML file
+    import yaml
+
+# If pyyaml is not installed
+except:
+    print("This program requires YAML package. Please install it by executing the following command")
+    print('%s'%'*'*20)
+    print("python -m pip install pyyaml")
+    print('%s'%'*'*20)
+    exit(1)
+
+
 from python_modules.label import Label
 with open("configuration.yml", 'r') as f:
     try:
@@ -24,7 +36,7 @@ with open(destination_file,'w') as file:
         print("Processing %s..."%label_name)
         label=Label(label_name,configuration,file)
         all_data.append(label.get_label_dict())
+print('%s'%'*'*20)
 
-
-
-print("All data:\n",all_data)
+print("All features were written into the file %s "%destination_file)
+print('%s'%'*'*20)

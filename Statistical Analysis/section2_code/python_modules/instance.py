@@ -1,5 +1,5 @@
 import os 
-import numpy 
+from numpy import genfromtxt
 from python_modules.features import *
 class Instance():
     
@@ -78,5 +78,5 @@ class Instance():
         return file_path
     @staticmethod
     def get_image_data(file_name):
-        image_data=numpy.genfromtxt(file_name, delimiter='\t')
+        image_data=genfromtxt(file_name, delimiter='\t')
         return image_data

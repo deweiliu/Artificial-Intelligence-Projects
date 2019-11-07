@@ -1,5 +1,4 @@
 from python_modules.utilities import *
-import numpy
 class Feature(object):
     def __init__(self,feature_name,features_dict,image_data):
         self.feature_name=feature_name
@@ -86,7 +85,6 @@ class Width(Feature):
         return 'width'
 
 class Span(Feature):
-    # todo
     def __init__(self,features_dict,image_data):
         super().__init__(Span.get_feature_name(),features_dict,image_data)
     def compute_value(self):
@@ -104,7 +102,7 @@ class Span(Feature):
                     max_pixel1=pixel1
                     max_pixel2=pixel2
         return result
-        
+
     @staticmethod
     def get_feature_name():
         return 'span'
