@@ -90,17 +90,21 @@ class Span(Feature):
     def __init__(self,features_dict,image_data):
         super().__init__(Span.get_feature_name(),features_dict,image_data)
     def compute_value(self):
-        starting_row=-1
-        ending_row=-1
-        for each_row in range(self.rows):
-            for each_column in range(self.columns):
-                if(Feature.parse_value( self.image_data[each_row][each_column])):
-                    if(starting_row==-1):
-                        starting_row=each_row
-                    ending_row=each_row
-                    break
-            
-        return ending_row-starting_row
+        result=0
+        max_pixel1=None
+        max_pixel2=None
+        black_pixels=find_blacks(self.image_data)
+        
+
+        for pixel1 in black_pixels:
+            for pixel2 in black_pixels:
+                distance=euclidean_distance(pixel1,pixel2)
+                if(distance>=result):
+                    result=distance
+                    max_pixel1=pixel1
+                    max_pixel2=pixel2
+        return result
+        
     @staticmethod
     def get_feature_name():
         return 'span'

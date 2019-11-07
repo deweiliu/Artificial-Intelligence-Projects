@@ -1,3 +1,4 @@
+import math
 import numpy
 
 def is_black(pixel,image_data):
@@ -189,3 +190,10 @@ def pixel_at_edge(pixel,shape):
 
     return False
         
+def euclidean_distance(pixel1,pixel2):
+    x1,y1=pixel1
+    x2,y2=pixel2
+    x_distance=abs(x1-x2)
+    y_distance=abs(y1-y2)
+    
+    return math.sqrt(x_distance*x_distance+y_distance*y_distance)

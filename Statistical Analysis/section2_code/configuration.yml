@@ -11,7 +11,7 @@ labels:
 - wineglass
 student_number: 40216004
 min_index: 1
-max_index: 20
+max_index: 4
 features:
 - nr_pix # The number of black pixels in the image.
 - height # The vertical distance between the topmost and bottommost black pixels in the image.
