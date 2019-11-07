@@ -196,18 +196,24 @@ class Left2Tile(Feature):
         super().__init__(Left2Tile.get_feature_name(),features_dict,image_data)
     def compute_value(self):
         result=0
-        for each_row in range(-1,self.rows+1):
-            for each_column in range(-1,self.columns+1):
+
+        # We consider the whole image is wraped in while pixels, in other words, if a pixel is out of bound, we consider it as white
+        for each_row in range(-1,self.rows):
+            for each_column in range(-1,self.columns):
+
                 pixel=(each_row,each_column)
+
+                # get the variable pixel is at the top-left of the 2-tile
                 tile=get_tile(pixel,2,self.image_data)
-                if(is_black((0,0),tile)):
-                    if(is_black((1,0),tile)):
-                        if(not is_black((0,1),tile)):
-                            if(not is_black((1,1),tile)):
+
+                if(is_black((0,0),tile)):# check if the top-left pixel is black
+                    if(is_black((1,0),tile)):# check if the bottom-left pixel is black
+                        if(not is_black((0,1),tile)):# check if the top-right pixel is black
+                            if(not is_black((1,1),tile)):# check if the bottom-right pixel is black
                                 result+=1
 
         return result
-        
+
     @staticmethod
     def get_feature_name():
         return 'left2tile'
@@ -216,17 +222,25 @@ class Right2Tile(Feature):
     def __init__(self,features_dict,image_data):
         super().__init__(Right2Tile.get_feature_name(),features_dict,image_data)
     def compute_value(self):
-        starting_row=-1
-        ending_row=-1
-        for each_row in range(self.rows):
-            for each_column in range(self.columns):
-                if(Feature.parse_value( self.image_data[each_row][each_column])):
-                    if(starting_row==-1):
-                        starting_row=each_row
-                    ending_row=each_row
-                    break
-            
-        return ending_row-starting_row;
+        result=0
+
+        # We consider the whole image is wraped in while pixels, in other words, if a pixel is out of bound, we consider it as white
+        for each_row in range(-1,self.rows):
+            for each_column in range(-1,self.columns):
+
+                pixel=(each_row,each_column)
+
+                # get the variable pixel is at the top-left of the 2-tile
+                tile=get_tile(pixel,2,self.image_data)
+
+                if(not is_black((0,0),tile)):# check if the top-left pixel is black
+                    if(not is_black((1,0),tile)):# check if the bottom-left pixel is black
+                        if(is_black((0,1),tile)):# check if the top-right pixel is black
+                            if( is_black((1,1),tile)):# check if the bottom-right pixel is black
+                                result+=1
+
+        return result
+
     @staticmethod
     def get_feature_name():
         return 'right2tile'
@@ -235,17 +249,13 @@ class Verticalness(Feature):
     def __init__(self,features_dict,image_data):
         super().__init__(Verticalness.get_feature_name(),features_dict,image_data)
     def compute_value(self):
-        starting_row=-1
-        ending_row=-1
-        for each_row in range(self.rows):
-            for each_column in range(self.columns):
-                if(Feature.parse_value( self.image_data[each_row][each_column])):
-                    if(starting_row==-1):
-                        starting_row=each_row
-                    ending_row=each_row
-                    break
-            
-        return ending_row-starting_row;
+        left2tile=self.features_dict['left2tile']
+        right2tile=self.features_dict['right2tile']
+        
+        nr_pix=self.features_dict['nr_pix']
+        return float(left2tile+right2tile)/nr_pix
+
+
     @staticmethod
     def get_feature_name():
         return 'verticalness'
@@ -254,17 +264,25 @@ class Top2Tile(Feature):
     def __init__(self,features_dict,image_data):
         super().__init__(Top2Tile.get_feature_name(),features_dict,image_data)
     def compute_value(self):
-        starting_row=-1
-        ending_row=-1
-        for each_row in range(self.rows):
-            for each_column in range(self.columns):
-                if(Feature.parse_value( self.image_data[each_row][each_column])):
-                    if(starting_row==-1):
-                        starting_row=each_row
-                    ending_row=each_row
-                    break
-            
-        return ending_row-starting_row;
+        result=0
+
+        # We consider the whole image is wraped in while pixels, in other words, if a pixel is out of bound, we consider it as white
+        for each_row in range(-1,self.rows):
+            for each_column in range(-1,self.columns):
+
+                pixel=(each_row,each_column)
+
+                # get the variable pixel is at the top-left of the 2-tile
+                tile=get_tile(pixel,2,self.image_data)
+
+                if(is_black((0,0),tile)):# check if the top-left pixel is black
+                    if(not is_black((1,0),tile)):# check if the bottom-left pixel is black
+                        if(is_black((0,1),tile)):# check if the top-right pixel is black
+                            if(not is_black((1,1),tile)):# check if the bottom-right pixel is black
+                                result+=1
+
+        return result
+
     @staticmethod
     def get_feature_name():
         return 'top2tile'
@@ -273,17 +291,24 @@ class Bottom2Tile(Feature):
     def __init__(self,features_dict,image_data):
         super().__init__(Bottom2Tile.get_feature_name(),features_dict,image_data)
     def compute_value(self):
-        starting_row=-1
-        ending_row=-1
-        for each_row in range(self.rows):
-            for each_column in range(self.columns):
-                if(Feature.parse_value( self.image_data[each_row][each_column])):
-                    if(starting_row==-1):
-                        starting_row=each_row
-                    ending_row=each_row
-                    break
-            
-        return ending_row-starting_row;
+        result=0
+
+        # We consider the whole image is wraped in while pixels, in other words, if a pixel is out of bound, we consider it as white
+        for each_row in range(-1,self.rows):
+            for each_column in range(-1,self.columns):
+
+                pixel=(each_row,each_column)
+
+                # get the variable pixel is at the top-left of the 2-tile
+                tile=get_tile(pixel,2,self.image_data)
+
+                if(not is_black((0,0),tile)):# check if the top-left pixel is black
+                    if(is_black((1,0),tile)):# check if the bottom-left pixel is black
+                        if(not is_black((0,1),tile)):# check if the top-right pixel is black
+                            if(is_black((1,1),tile)):# check if the bottom-right pixel is black
+                                result+=1
+
+        return result
     @staticmethod
     def get_feature_name():
         return 'bottom2tile'
@@ -292,17 +317,13 @@ class Horizontalness(Feature):
     def __init__(self,features_dict,image_data):
         super().__init__(Horizontalness.get_feature_name(),features_dict,image_data)
     def compute_value(self):
-        starting_row=-1
-        ending_row=-1
-        for each_row in range(self.rows):
-            for each_column in range(self.columns):
-                if(Feature.parse_value( self.image_data[each_row][each_column])):
-                    if(starting_row==-1):
-                        starting_row=each_row
-                    ending_row=each_row
-                    break
-            
-        return ending_row-starting_row;
+        top2tile=self.features_dict['top2tile']
+        bottom2tile=self.features_dict['bottom2tile']
+        
+        nr_pix=self.features_dict['nr_pix']
+        return float(top2tile+bottom2tile)/nr_pix
+
+
     @staticmethod
     def get_feature_name():
         return 'horizontalness'
