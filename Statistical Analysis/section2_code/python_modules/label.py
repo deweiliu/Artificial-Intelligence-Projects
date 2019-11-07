@@ -13,6 +13,7 @@ class Label():
         min_index=self.configuration['min_index']
         max_index=self.configuration['max_index']
         for index in range(min_index,max_index+1):
+            print("Index : %s"%index)
             instance=Instance(self.label_name,index,self.configuration,self.destination_file)
             instance_dict=instance.get_instance_dict()
             if(isinstance( instance_dict,dict)):

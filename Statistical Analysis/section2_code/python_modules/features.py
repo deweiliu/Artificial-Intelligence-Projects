@@ -390,9 +390,14 @@ class NrEyes(Feature):
         for cluster in clusters:
             flag=True
             for pixel in cluster:
+
+                # if the cluster contains white pixel which is at the edge
                 if(pixel_at_edge(pixel,self.image_data.shape)):
+
+                    # it is not an eye
                     flag=False
                     break
+            # if this cluster of white pixels is an eye
             if(flag==True):
                 result+=1
 
@@ -406,17 +411,23 @@ class Hollowness(Feature):
     def __init__(self,features_dict,image_data):
         super().__init__(Hollowness.get_feature_name(),features_dict,image_data)
     def compute_value(self):
-        starting_row=-1
-        ending_row=-1
-        for each_row in range(self.rows):
-            for each_column in range(self.columns):
-                if(Feature.parse_value( self.image_data[each_row][each_column])):
-                    if(starting_row==-1):
-                        starting_row=each_row
-                    ending_row=each_row
+        number_of_eye_pixels=0
+
+        white_pixels=find_whites(self.image_data)
+        clusters=cluster_neighbour_pixels(white_pixels,contacted_neighbours_only=True)
+        for cluster in clusters:
+            flag=True
+            for pixel in cluster:
+                if(pixel_at_edge(pixel,self.image_data.shape)):
+                    flag=False
                     break
-            
-        return ending_row-starting_row;
+            # if this cluster of white pixels is an eye
+            if(flag==True):
+                number_of_eye_pixels+=len(cluster)
+        
+        black_pixels=        self.features_dict['nr_pix']
+        return float(number_of_eye_pixels)/black_pixels  
+
     @staticmethod
     def get_feature_name():
         return 'hollowness'

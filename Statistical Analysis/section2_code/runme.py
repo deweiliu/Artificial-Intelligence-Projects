@@ -1,7 +1,5 @@
 import os 
-from python_modules.image_list import image_list
 import yaml
-from python_modules.image_list import image_list
 from python_modules.label import Label
 with open("configuration.yml", 'r') as f:
     try:
@@ -23,6 +21,7 @@ with open(destination_file,'w') as file:
     label_names=configuration['labels']
     label_names.sort()
     for label_name in label_names:
+        print("Processing %s..."%label_name)
         label=Label(label_name,configuration,file)
         all_data.append(label.get_label_dict())
 
