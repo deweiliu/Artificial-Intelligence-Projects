@@ -1,17 +1,33 @@
-label	index	nr_pix	height	width	span	rows_with_5	cols_with_5	neigh1	neigh5	left2tile	right2tile	verticalness	top2tile	bottom2tile	horizontalness	feature15	feature16	nr_regions	nr_eyes	hollowness	feature20
-banana	1	121	40	36	40	3	4	1	21	25	40	40	40	40	40	40	40	40	40	40	40
-banana	2	108	34	31	34	6	5	1	22	18	34	34	34	34	34	34	34	34	34	34	34
-cherry	1	108	35	33	35	4	5	0	1	25	35	35	35	35	35	35	35	35	35	35	35
-cherry	2	132	40	40	40	8	9	1	2	39	40	40	40	40	40	40	40	40	40	40	40
-envelope	1	171	30	40	30	10	3	0	2	49	30	30	30	30	30	30	30	30	30	30	30
-envelope	2	156	23	37	23	11	2	0	6	43	23	23	23	23	23	23	23	23	23	23	23
-flower	1	212	48	39	48	21	20	3	14	58	48	48	48	48	48	48	48	48	48	48	48
-flower	2	220	46	33	46	20	20	2	28	64	46	46	46	46	46	46	46	46	46	46	46
-golfclub	1	113	37	35	37	6	6	2	3	17	37	37	37	37	37	37	37	37	37	37	37
-golfclub	2	131	37	40	37	7	3	4	38	15	37	37	37	37	37	37	37	37	37	37	37
-pear	1	112	35	35	35	4	5	1	2	31	35	35	35	35	35	35	35	35	35	35	35
-pear	2	110	38	34	38	4	5	1	1	35	38	38	38	38	38	38	38	38	38	38	38
-pencil	1	129	32	42	32	8	7	0	41	7	32	32	32	32	32	32	32	32	32	32	32
-pencil	2	114	33	36	33	7	6	0	34	10	33	33	33	33	33	33	33	33	33	33	33
-wineglass	1	81	38	24	38	2	4	3	5	36	38	38	38	38	38	38	38	38	38	38	38
-wineglass	2	74	38	20	38	3	3	4	0	39	38	38	38	38	38	38	38	38	38	38	38
+label	index	nr_regions	nr_eyes	hollowness	feature20
+banana	1	1	1	40	40
+banana	2	1	2	34	34
+banana	3	1	1	37	37
+banana	4	1	1	38	38
+cherry	1	1	1	35	35
+cherry	2	1	1	40	40
+cherry	3	1	1	38	38
+cherry	4	1	1	38	38
+envelope	1	1	2	30	30
+envelope	2	1	2	23	23
+envelope	3	1	2	34	34
+envelope	4	1	2	34	34
+flower	1	1	5	48	48
+flower	2	1	7	46	46
+flower	3	1	6	48	48
+flower	4	1	6	47	47
+golfclub	1	3	1	37	37
+golfclub	2	3	3	37	37
+golfclub	3	3	1	36	36
+golfclub	4	3	9	31	31
+pear	1	1	1	35	35
+pear	2	1	1	38	38
+pear	3	1	1	37	37
+pear	4	1	1	39	39
+pencil	1	1	2	32	32
+pencil	2	1	2	33	33
+pencil	3	1	2	34	34
+pencil	4	1	2	40	40
+wineglass	1	1	0	38	38
+wineglass	2	1	0	38	38
+wineglass	3	1	0	39	39
+wineglass	4	1	0	41	41

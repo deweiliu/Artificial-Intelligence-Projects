@@ -33,6 +33,7 @@ class NrPix(Feature):
         super().__init__(NrPix.get_feature_name(),features_dict,image_data)
 
     def compute_value(self):
+        return len(find_blacks(self.image_data))
         result=0
         for each_row in range(self.rows):
             for each_column in range(self.columns):
@@ -370,17 +371,11 @@ class NrRegions(Feature):
     def __init__(self,features_dict,image_data):
         super().__init__(NrRegions.get_feature_name(),features_dict,image_data)
     def compute_value(self):
-        starting_row=-1
-        ending_row=-1
-        for each_row in range(self.rows):
-            for each_column in range(self.columns):
-                if(Feature.parse_value( self.image_data[each_row][each_column])):
-                    if(starting_row==-1):
-                        starting_row=each_row
-                    ending_row=each_row
-                    break
-            
-        return ending_row-starting_row;
+        black_pixels=find_blacks(self.image_data)
+        clusters=cluster_neighbour_pixels(black_pixels)
+        return len(clusters)
+
+
     @staticmethod
     def get_feature_name():
         return 'nr_regions'
@@ -389,17 +384,20 @@ class NrEyes(Feature):
     def __init__(self,features_dict,image_data):
         super().__init__(NrEyes.get_feature_name(),features_dict,image_data)
     def compute_value(self):
-        starting_row=-1
-        ending_row=-1
-        for each_row in range(self.rows):
-            for each_column in range(self.columns):
-                if(Feature.parse_value( self.image_data[each_row][each_column])):
-                    if(starting_row==-1):
-                        starting_row=each_row
-                    ending_row=each_row
+        result=0
+        white_pixels=find_whites(self.image_data)
+        clusters=cluster_neighbour_pixels(white_pixels,contacted_neighbours_only=True)
+        for cluster in clusters:
+            flag=True
+            for pixel in cluster:
+                if(pixel_at_edge(pixel,self.image_data.shape)):
+                    flag=False
                     break
-            
-        return ending_row-starting_row;
+            if(flag==True):
+                result+=1
+
+        return result
+
     @staticmethod
     def get_feature_name():
         return 'nr_eyes'
