@@ -20,6 +20,12 @@ with open("configuration.yml", 'r') as f:
         print(exc)
 
 destination_file=os.path.join(configuration['destination_folder'],"%s_features.csv"%configuration['student_number'])
+
+# if the file exists, remove the file
+if(os.path.exists(destination_file)):
+    os.remove(destination_file)
+
+# create the file to write data
 with open(destination_file,'w') as file:
     # Write header
     header=['label','index']+configuration['features']

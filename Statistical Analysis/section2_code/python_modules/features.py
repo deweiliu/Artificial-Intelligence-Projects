@@ -331,43 +331,52 @@ class Horizontalness(Feature):
     def get_feature_name():
         return 'horizontalness'
 
-class Feature15(Feature):
+class Concentration(Feature):
     def __init__(self,features_dict,image_data):
-        super().__init__(Feature15.get_feature_name(),features_dict,image_data)
+        super().__init__(Concentration.get_feature_name(),features_dict,image_data)
     def compute_value(self):
-        starting_row=-1
-        ending_row=-1
-        for each_row in range(self.rows):
-            for each_column in range(self.columns):
-                if(Feature.parse_value( self.image_data[each_row][each_column])):
-                    if(starting_row==-1):
-                        starting_row=each_row
-                    ending_row=each_row
-                    break
-            
-        return ending_row-starting_row;
-    @staticmethod
-    def get_feature_name():
-        return 'feature15'
+        result=1
+        # We consider the whole image is wraped in while pixels, in other words, if a pixel is out of bound, we consider it as white
+        for each_row in range(-2,self.rows):
+            for each_column in range(-2,self.columns):
+                pixel=(each_row,each_column)
 
-class Feature16(Feature):
-    def __init__(self,features_dict,image_data):
-        super().__init__(Feature16.get_feature_name(),features_dict,image_data)
-    def compute_value(self):
-        starting_row=-1
-        ending_row=-1
-        for each_row in range(self.rows):
-            for each_column in range(self.columns):
-                if(Feature.parse_value( self.image_data[each_row][each_column])):
-                    if(starting_row==-1):
-                        starting_row=each_row
-                    ending_row=each_row
-                    break
-            
-        return ending_row-starting_row;
+                # get the variable pixel is at the top-left of the 2-tile
+                tile=get_tile(pixel,3,self.image_data)
+                pixels_in_tile=[(0,0),(0,1),(0,2),(1,0),(1,1),(1,2),(2,0),(2,1),(2,2)]
+                black_count=0
+                for each_pixel_in_tile in pixels_in_tile:
+                    if(is_black(each_pixel_in_tile,tile)):
+                        black_count+=1
+                        if(black_count>=5):
+                            result+=1
+                            break
+        return result
     @staticmethod
     def get_feature_name():
-        return 'feature16'
+        return 'concentration'
+
+class Crossness(Feature):
+    def __init__(self,features_dict,image_data):
+        super().__init__(Crossness.get_feature_name(),features_dict,image_data)
+    def compute_value(self):
+        result=1
+        # We consider the whole image is wraped in while pixels, in other words, if a pixel is out of bound, we consider it as white
+        for each_row in range(-2,self.rows):
+            for each_column in range(-2,self.columns):
+                pixel=(each_row,each_column)
+
+                # get the variable pixel is at the top-left of the 2-tile
+                tile=get_tile(pixel,3,self.image_data)
+                black_pixels_in_tile=find_blacks(tile)
+                if(black_pixels_in_tile==[(0,0),(1,1),(2,2)]):
+                    result+=1
+                elif(black_pixels_in_tile==[(0,2),(1,1),(2,0)]):
+                    result+=1
+        return result
+    @staticmethod
+    def get_feature_name():
+        return 'crossness'
 
 class NrRegions(Feature):
     def __init__(self,features_dict,image_data):
@@ -434,22 +443,40 @@ class Hollowness(Feature):
     def get_feature_name():
         return 'hollowness'
 
-class Feature20(Feature):
+class Straightness(Feature):
     def __init__(self,features_dict,image_data):
-        super().__init__(Feature20.get_feature_name(),features_dict,image_data)
+        super().__init__(Straightness.get_feature_name(),features_dict,image_data)
     def compute_value(self):
-        starting_row=-1
-        ending_row=-1
+        result=0
+        lines=list() # all lines in the image. each element in the lines is a list of pixels that these pixels are LINEAR
+
+        # horizontal lines
         for each_row in range(self.rows):
+            line=list()
             for each_column in range(self.columns):
-                if(Feature.parse_value( self.image_data[each_row][each_column])):
-                    if(starting_row==-1):
-                        starting_row=each_row
-                    ending_row=each_row
-                    break
-            
-        return ending_row-starting_row;
+                pixel=(each_row,each_column)
+                line.append(pixel)
+            lines.append(line)
+
+        # vertical lines
+        for each_column in range(self.columns):
+            line=list()
+            for each_row in range(self.rows):
+                pixel=(each_row,each_column)
+                line.append(pixel)
+            lines.append(line)
+
+
+        for each_line in lines:
+            black_count=0
+            for each_pixel in each_line:
+                if(is_black(each_pixel,self.image_data)):
+                    black_count+=1
+            if(black_count>result):
+                result=black_count
+        
+        return result
     @staticmethod
     def get_feature_name():
-        return 'feature20'
+        return 'straightness'
             

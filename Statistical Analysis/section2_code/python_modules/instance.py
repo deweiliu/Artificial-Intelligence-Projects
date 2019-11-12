@@ -36,12 +36,12 @@ class Instance():
         self.feature_classes.append(Top2Tile)
         self.feature_classes.append(Bottom2Tile)
         self.feature_classes.append(Horizontalness)
-        self.feature_classes.append(Feature15)
-        self.feature_classes.append(Feature16)
+        self.feature_classes.append(Concentration)
+        self.feature_classes.append(Crossness)
         self.feature_classes.append(NrRegions)
         self.feature_classes.append(NrEyes)
         self.feature_classes.append(Hollowness)
-        self.feature_classes.append(Feature20)
+        self.feature_classes.append(Straightness)
 
 
     def get_instance_dict(self):

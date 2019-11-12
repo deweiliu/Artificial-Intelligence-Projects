@@ -27,9 +27,9 @@ features:
 - top2tile # The number of unique 2-tiles in the image where the top two entries are black and the bottom two entries are white.
 - bottom2tile # The number of unique 2-tiles in the image where the bottom two entries are black and the top two entries are white.
 - horizontalness # The sum of the previous two features, divided by the number of black pixels in the image.
-- feature15 # Define a custom feature using 3-tiles. Explain and justify the rationale for your feature.
-- feature16 # Define another custom feature using 3-tiles. Explain and justify the rationale for your feature.
+- concentration # Custom feature 15: The number of unique 3-tiles in the image where the number of black pixels is greate than the number of white pixels (i.e. at least 5 black pixels)
+- crossness # Custom feature 16: The number of unique 3-tiles in the image where either a) only the 3 pixels (0,0),(1,1),(2,2) are black or b) only the 3 pixels (0,2),(1,1),(2,0) 
 - nr_regions # Two black pixels A and B are connected if they are neighbours of each other, or if a black pixel neighbour of A is connected to B (this definition is actually symmetric); a connected region is a maximal set of black pixels which are connected to each other; this feature is the number of connected regions in the image.
 - nr_eyes # A region of white pixels is an eye if there is a ring of black pixels surrounding it which are all connected (i.e. they form a chain of neighbours). This feature is the number of eyes in the image. Note that while two neighbouring black pixels are necessarily in the same region, two neighbouring white pixels are not necessarily in the same eye.
 - hollowness # This is the number of white pixels which are in eyes divided by the number of black pixels in the image.
-- feature20 # Design any other feature you like. Justify why you think it may be a useful feature for distinguishing between object doodles.
+- straightness # Custom feature 20: The maximum number of black pixels in the image that these black pixels are LINEAR. Definition of LINEAR: a group of pixels are linear, if all pixels are in the same line which should be either vertical or horizontal. (e.g (14,0),(14,3),(14,4),(14,6) are LINEAR because they are on the line x = 14)

@@ -6,7 +6,7 @@ def is_black(pixel,image_data):
     try:
         x,y=pixel
         value=image_data[x][y]
-    except:
+    except IndexError:
         # x or y is out of index
         # consider it as a white pixel
         return False
@@ -23,6 +23,7 @@ def is_black(pixel,image_data):
             # otherwise, black
             return True
     except:
+        print('Warnning: pixel value is not an integer')
         # value is not an integer, consider it as a black pixel
         return True
 
