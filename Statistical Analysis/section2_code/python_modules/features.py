@@ -27,6 +27,7 @@ class Feature(object):
         except:
             return True
 
+# Feature 1
 class NrPix(Feature):
     def __init__(self,features_dict,image_data):
         super().__init__(NrPix.get_feature_name(),features_dict,image_data)
@@ -45,6 +46,7 @@ class NrPix(Feature):
         return 'nr_pix'
             
 
+# Feature 2
 class Height(Feature):
     def __init__(self,features_dict,image_data):
         super().__init__(Height.get_feature_name(),features_dict,image_data)
@@ -64,6 +66,7 @@ class Height(Feature):
     def get_feature_name():
         return 'height'
 
+# Feature 3
 class Width(Feature):
     def __init__(self,features_dict,image_data):
         super().__init__(Width.get_feature_name(),features_dict,image_data)
@@ -84,29 +87,26 @@ class Width(Feature):
     def get_feature_name():
         return 'width'
 
+# Feature 4
 class Span(Feature):
     def __init__(self,features_dict,image_data):
         super().__init__(Span.get_feature_name(),features_dict,image_data)
     def compute_value(self):
         result=0
-        max_pixel1=None
-        max_pixel2=None
         black_pixels=find_blacks(self.image_data)
         
-
         for pixel1 in black_pixels:
             for pixel2 in black_pixels:
                 distance=euclidean_distance(pixel1,pixel2)
                 if(distance>=result):
                     result=distance
-                    max_pixel1=pixel1
-                    max_pixel2=pixel2
         return result
 
     @staticmethod
     def get_feature_name():
         return 'span'
 
+# Feature 5
 class RowsWith5(Feature):
     def __init__(self,features_dict,image_data):
         super().__init__(RowsWith5.get_feature_name(),features_dict,image_data)
@@ -126,6 +126,7 @@ class RowsWith5(Feature):
     def get_feature_name():
         return 'rows_with_5'
 
+# Feature 6
 class ColsWith5(Feature):
     def __init__(self,features_dict,image_data):
         super().__init__(ColsWith5.get_feature_name(),features_dict,image_data)
@@ -146,6 +147,7 @@ class ColsWith5(Feature):
     def get_feature_name():
         return 'cols_with_5'
 
+# Feature 7
 class Neigh1(Feature):
     def __init__(self,features_dict,image_data):
         super().__init__(Neigh1.get_feature_name(),features_dict,image_data)
@@ -170,6 +172,7 @@ class Neigh1(Feature):
     def get_feature_name():
         return 'neigh1'
 
+# Feature 8
 class Neigh5(Feature):
     def __init__(self,features_dict,image_data):
         super().__init__(Neigh5.get_feature_name(),features_dict,image_data)
@@ -194,6 +197,7 @@ class Neigh5(Feature):
     def get_feature_name():
         return 'neigh5'
 
+# Feature 9
 class Left2Tile(Feature):
     def __init__(self,features_dict,image_data):
         super().__init__(Left2Tile.get_feature_name(),features_dict,image_data)
@@ -221,6 +225,7 @@ class Left2Tile(Feature):
     def get_feature_name():
         return 'left2tile'
 
+# Feature 10
 class Right2Tile(Feature):
     def __init__(self,features_dict,image_data):
         super().__init__(Right2Tile.get_feature_name(),features_dict,image_data)
@@ -248,6 +253,7 @@ class Right2Tile(Feature):
     def get_feature_name():
         return 'right2tile'
 
+# Feature 11
 class Verticalness(Feature):
     def __init__(self,features_dict,image_data):
         super().__init__(Verticalness.get_feature_name(),features_dict,image_data)
@@ -263,6 +269,7 @@ class Verticalness(Feature):
     def get_feature_name():
         return 'verticalness'
 
+# Feature 12
 class Top2Tile(Feature):
     def __init__(self,features_dict,image_data):
         super().__init__(Top2Tile.get_feature_name(),features_dict,image_data)
@@ -290,6 +297,7 @@ class Top2Tile(Feature):
     def get_feature_name():
         return 'top2tile'
 
+# Feature 13
 class Bottom2Tile(Feature):
     def __init__(self,features_dict,image_data):
         super().__init__(Bottom2Tile.get_feature_name(),features_dict,image_data)
@@ -316,6 +324,7 @@ class Bottom2Tile(Feature):
     def get_feature_name():
         return 'bottom2tile'
 
+# Feature 14
 class Horizontalness(Feature):
     def __init__(self,features_dict,image_data):
         super().__init__(Horizontalness.get_feature_name(),features_dict,image_data)
@@ -331,6 +340,7 @@ class Horizontalness(Feature):
     def get_feature_name():
         return 'horizontalness'
 
+# Feature 15
 class Concentration(Feature):
     def __init__(self,features_dict,image_data):
         super().__init__(Concentration.get_feature_name(),features_dict,image_data)
@@ -356,6 +366,7 @@ class Concentration(Feature):
     def get_feature_name():
         return 'concentration'
 
+# Feature 16
 class Crossness(Feature):
     def __init__(self,features_dict,image_data):
         super().__init__(Crossness.get_feature_name(),features_dict,image_data)
@@ -378,6 +389,7 @@ class Crossness(Feature):
     def get_feature_name():
         return 'crossness'
 
+# Feature 17
 class NrRegions(Feature):
     def __init__(self,features_dict,image_data):
         super().__init__(NrRegions.get_feature_name(),features_dict,image_data)
@@ -391,6 +403,7 @@ class NrRegions(Feature):
     def get_feature_name():
         return 'nr_regions'
 
+# Feature 18
 class NrEyes(Feature):
     def __init__(self,features_dict,image_data):
         super().__init__(NrEyes.get_feature_name(),features_dict,image_data)
@@ -418,6 +431,7 @@ class NrEyes(Feature):
     def get_feature_name():
         return 'nr_eyes'
 
+# Feature 19
 class Hollowness(Feature):
     def __init__(self,features_dict,image_data):
         super().__init__(Hollowness.get_feature_name(),features_dict,image_data)
@@ -443,6 +457,7 @@ class Hollowness(Feature):
     def get_feature_name():
         return 'hollowness'
 
+# Feature 20
 class Straightness(Feature):
     def __init__(self,features_dict,image_data):
         super().__init__(Straightness.get_feature_name(),features_dict,image_data)
