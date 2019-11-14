@@ -1,6 +1,6 @@
 # the runme.R file in each question of part 3 should load this init.R file
 # which sets up essential variables and loads utility functions
-
+source('../utilities/libraries.R')
 welcome_text <- cat(paste(
   strrep('*', 10),
   sprintf('Running R script runme.R for question %d', QUESTION_NUMBER),
@@ -27,7 +27,7 @@ INDICES <- list(
 # Load feature data
 FEATURES_PATH <- '../../section2_features/40216004_features.csv'
 feature_data <- read.csv(FEATURES_PATH, header = TRUE, sep = '\t')
-
+feature_names<-names(feature_data[3:length(feature_data)])
 # set up figure directory which stores figures
 OUTPUT_DIR <- './outputs'
 create_dir(OUTPUT_DIR)
