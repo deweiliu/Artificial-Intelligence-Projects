@@ -1,3 +1,4 @@
+print('Loading libraries...')
 library(psych)
 library(ggplot2)
 library(gridExtra)

@@ -42,7 +42,6 @@ for (feature_name in features) {
       # Draw the histogram with data to be transformed
       q5_draw_histogram(feature_name, set,TRUE)
       
-      
     } else{
       # left/negative skewness
       # no feature is negative skewness

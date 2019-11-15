@@ -1,6 +1,12 @@
-dQUESTION_NUMBER <- 1
+QUESTION_NUMBER <- 2
 source('../utilities/init.R')
 source('functions.R')
+
+
+
+
+#########################
+# summaries of features
 statics_names <- c('mean','standard deviation','minimum','maximum','range','1st quantile','median','3rd quantile')
 sets <- c('living', 'nonliving', 'fullset')
 for (set in sets) {
@@ -21,4 +27,15 @@ for (set in sets) {
   dev.off()
   
 }
+
+####################################
+# compare values in different groups
+
+features_to_compare<-c('top2tile','bottom2tile','horizontalness')
+for (feature_name in features_to_compare){
+  compare_feature_in_sets(feature_name,'living','nonliving')
+  
+}
+
+
 finish()
