@@ -1,4 +1,4 @@
-QUESTION_NUMBER <- 1
+dQUESTION_NUMBER <- 1
 source('../utilities/init.R')
 source('functions.R')
 statics_names <- c('mean','standard deviation','minimum','maximum','range','1st quantile','median','3rd quantile')
