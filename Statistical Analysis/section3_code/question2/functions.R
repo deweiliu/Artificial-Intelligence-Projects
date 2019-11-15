@@ -60,6 +60,7 @@ compare_feature_in_sets <- function(feature_name, set1, set2) {
     xlab = feature_name,
     main = paste('Histogram of ', feature_name, 'for', set1, 'and', set2)
   ) # green
+  # Reference: https://stackoverflow.com/questions/3541713/how-to-plot-two-histograms-together-in-r
   plot(plot2, col = rgb(1, 0, 0, 1 / 4), xlim = c(0, max),add = T) # red
   
   legend(x = "topright", legend = c(paste("Green =", set1), paste("Red = ", set2))) # add text
