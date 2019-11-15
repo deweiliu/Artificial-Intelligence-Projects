@@ -34,3 +34,5 @@ create_dir(OUTPUT_DIR)
 
 # define the format of figures
 FIGURE_FORMAT = '.jpeg'
+
+SIGNIFICANT_LEVEL=0.05

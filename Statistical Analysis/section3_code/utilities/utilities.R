@@ -12,3 +12,12 @@ finish <- function() {
   ))
   finishing_text
 }
+jpeg_start<-function(file_name){
+  file_path <-
+    file.path(OUTPUT_DIR, paste(file_name, FIGURE_FORMAT, sep = ''))
+  print(paste('Generating', file_path))
+  jpeg(file = file_path)
+}
+jpeg_end<-function(){
+  dev.off()
+}
