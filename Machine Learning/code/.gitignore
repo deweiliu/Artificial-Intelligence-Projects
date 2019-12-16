@@ -1,0 +1,5 @@
+# Output diagrams
+output/*
+
+# intemediate data files
+cache/*
