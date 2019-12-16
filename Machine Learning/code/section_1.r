@@ -13,7 +13,7 @@ print_save<-function(output_directory,file_name,data){
     ggsave(output_file,dpi=400)
   }else{
   
-  # reference https://stackoverflow.com/questions/30371516/how-to-save-summarylm-to-a-file/30371944
+  # reference https://stackoverflow.com/tasks/30371516/how-to-save-summarylm-to-a-file/30371944
   
   sink(output_file)
   print(data)
@@ -46,27 +46,27 @@ create_dir<-function(directory){
   }
   return (directory)
 }
-start_question<-function(question_number){
+start_task<-function(task_number){
   set.seed(3060) # Ensure the result for each run is the same
   print(strrep('*',times=50))
-    print(paste("Starting Question",question_number))
+    print(paste("Starting Task",task_number))
     print(strrep('*',times=50))
     
   configuration<<-read_configuration()
   feature_data<<-read_features(configuration$assignment2$features_file)
   output_dir<-create_dir(configuration$output_directory)
   output_dir<-create_dir(paste(output_dir,'section1/',sep=''))
-  output_dir<<-create_dir(paste(output_dir,'question',question_number,'/',sep=''))
+  output_dir<<-create_dir(paste(output_dir,'task',task_number,'/',sep=''))
 }
-finish_question<-function(question_number,reserved_varialbes=c()){
+finish_task<-function(task_number,reserved_varialbes=c()){
   print(strrep('*',times=50))
-  print(paste("Question",question_number,'Finished'))
+  print(paste("Task",task_number,'Finished'))
   print(strrep('*',times=50))
   
   all_objects<-ls(envir=.GlobalEnv) #reference https://www.rdocumentation.org/packages/base/versions/3.6.1/topics/ls
   
   # do not remove functions
-  all_variables<-setdiff(all_objects,lsf.str(envir=.GlobalEnv)) # reference https://stackoverflow.com/questions/8305754/remove-all-variables-except-functions
+  all_variables<-setdiff(all_objects,lsf.str(envir=.GlobalEnv)) # reference https://stackoverflow.com/tasks/8305754/remove-all-variables-except-functions
   
   # Find out all varialbes to be removed
   remove_variables<-all_variables[!all_variables%in%reserved_varialbes]
@@ -78,9 +78,9 @@ finish_question<-function(question_number,reserved_varialbes=c()){
 # Section 1 ------------------------------------------------------------------
 start_section1()
 
-# Question 1 ------------------------------------------------------------------
+# Task 1 ------------------------------------------------------------------
 
-start_question(question_number = 1)
+start_task(task_number = 1)
 head(feature_data)
 living<-sapply(feature_data$label, is_living,configuration=configuration)
 
@@ -94,7 +94,7 @@ data<-cbind.data.frame(verticalness=feature_data$verticalness,living)
 # Mean   :0.51907   Mean   :0.5  
 # 3rd Qu.:0.61048   3rd Qu.:1.0  
 # Max.   :1.27027   Max.   :1.0
-print_save(output_dir,'trainning data summary', summary(data))
+print_save(output_dir,'trainning data summary.txt', summary(data))
 
 
 glmfit<<-glm(living~verticalness,family='binomial',data=data)
@@ -116,10 +116,10 @@ plt<-ggplot(regression_line,aes(x=verticalness,y=living.value))+
   geom_line(data=regression_line,color='yellow',size=1)
 print_save(output_dir,'regression_line.jpeg',plt)
 
-finish_question(question_number = 1,reserved_varialbes = c('glmfit','data')) # save the model for question 2
+finish_task(task_number = 1,reserved_varialbes = c('glmfit','data')) # save the model for task 2
 
-# Question 2 ------------------------------------------------------------------
-start_question(question_number = 2)
+# Task 2 ------------------------------------------------------------------
+start_task(task_number = 2)
 
 # reference https://canvas.qub.ac.uk/courses/8433/files/487423?module_item_id=205269
 
@@ -161,4 +161,5 @@ correct_rate<-mean(data$living==data$living.prediction)
 # "Correct Rate = 0.7"
 print(paste('Correct Rate =',correct_rate))
 
-finish_question(question_number = 2) # save the model for question 2
+finish_task(task_number = 2)
+
