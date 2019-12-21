@@ -26,7 +26,7 @@ print_save <- function(output_directory, file_name, data) {
     sink()
   }
   print(paste('Output saved at ', output_file))
-  return (output_file)
+  
 }
 read_configuration <- function() {
   configuration <- yaml.load_file('configuration.yml')
@@ -195,101 +195,119 @@ print(paste('Correct Rate =', correct_rate))
 
 finish_task(task_number = 2)
 
-
 # Task 3 ------------------------------------------------------------------
 start_task(task_number = 3)
-## top2tile
 
-build_data <- function(feature_name) {
-  # constrct data frame
-  living <-
-    sapply(feature_data$label, is_living, configuration = configuration)
-  data <-
-    cbind.data.frame(top2tile = feature_data[[feature_name]], living)
-  names(data) <- c(feature_name, 'living')
-  return(data)
-}
-build_model <- function(feature_name, data) {
-  # build model
-  formula <- as.formula(paste('living~', feature_name))
-  glmfit <<- glm(formula, family = 'binomial', data = data)
+# constrct data frame
+living <-
+  sapply(feature_data$label, is_living, configuration = configuration)
+data <-  cbind.data.frame(feature_data,    living)
+# Drop columns index and label
+
+data <- data[,!(names(data) %in% c('label', 'index'))]
+
+
+lm_largest_pvalue_feature <- function(lm_model) {
+  pvalues <- summary(lm_model)$coefficients[, 4]
+  pvalues <- pvalues[2:length(pvalues)]
+  max(pvalues)
+  feature_index <- match(max(pvalues), pvalues)
+  return(names(pvalues[feature_index]))
   
-  print_save(output_dir,
-             paste(feature_name, '_glm_summary.txt', sep = ''),
-             summary(glmfit))
-  
-  # plot fitted curve
-  x.range <- range(data[[feature_name]])
-  x.values <- seq(x.range[1], x.range[2], by = 0.01)
-  fitted_curve <- data.frame(x.values)
-  names(fitted_curve) <- c(feature_name)
-  fitted_curve[['dummy.living']] <-
-    predict(glmfit, fitted_curve, type = 'response')
-  
-  print_save(
-    output_dir,
-    paste(feature_name, '_fitted_curve_summary.txt', sep = ''),
-    summary(fitted_curve)
-  )
-  
-  
-  plt <- ggplot(data, aes_string(x = feature_name, y = 'living')) +
-    geom_point(aes(colour = factor(living)),
-               show.legend = T,
-               position = 'dodge') +
-    geom_line(
-      data = fitted_curve,
-      aes_string(x = feature_name, y = 'dummy.living'),
-      color = 'yellow',
-      size = 1
-    )
-  print_save(output_dir,
-             paste(feature_name, '_fitted_curve.jpeg', sep = ''),
-             plt)
-  return (glmfit)
 }
 
-predict_living <-
-  function(feature_name,
-           feature_value_cutoff,
-           data,
-           glm_model) {
-    cutoff_data <- data.frame(feature_value_cutoff)
-    names(cutoff_data) <- c(feature_name)
-    
-    cutoff = predict(glm_model, cutoff_data, type = 'response')
-    print(paste('Cutoff =', cutoff))
-    data$predicted_value <-
-      predict(glm_model, data, type = 'response')
-    
-    data$living.prediction <- data$predicted_value > cutoff
-    
-    # ###### correct rate
-    # Mode   FALSE    TRUE
-    # logical      48     112
-    summary(data$living == data$living.prediction)
-    correct_rate <- mean(data$living == data$living.prediction)
-    # "Correct Rate = 0.7"
-    print(paste('Correct Rate for feature', feature_name, '=', correct_rate))
-  }
+# use the full dataset to build the model
+regression_model <- lm(living ~ ., data = data)
+print_save(output_dir,
+           '20 feature linear regression model.txt',
+           summary(regression_model))
 
-## peform logistic regression on feature top2tile
-feature_name <- 'top2tile'
-data <- build_data(feature_name)
-glm_model <- build_model(feature_name, data)
-feature_cutoff_value <- 60
-predict_living(feature_name , feature_cutoff_value, data, glm_model)
+# Drop 17 features using pvalue backwards-elimination
+number_features_to_remove <- 20 - 3 # we need to remove 17 features
+for (i in 1:number_features_to_remove) {
+  regression_model <- lm(living ~ ., data = data)
+  
+  invaluable_feature <- lm_largest_pvalue_feature(regression_model)
+  print(paste('dropping feature',invaluable_feature))
+  data <- data[, !(names(data) %in% invaluable_feature)]
+}
+regression_model <- lm(living ~ ., data = data)
+print_save(output_dir,
+           '3 feature linear regression model.txt',
+           summary(regression_model))
 
-## peform logistic regression on feature bottom2tile
-feature_name <- 'bottom2tile'
-data <- build_data(feature_name)
-glm_model <- build_model(feature_name, data)
-feature_cutoff_value <- 70
-predict_living(feature_name , feature_cutoff_value, data, glm_model)
+# Now the training data only contains   height           span         hollowness        living
+names(data)
 
-## peform logistic regression on feature horizontalness
-feature_name <- 'horizontalness'
-data <- build_data(feature_name)
-glm_model <- build_model(feature_name, data)
-feature_cutoff_value <- 0.7
-predict_living(feature_name , feature_cutoff_value, data, glm_model)
+
+# cross validation, assign observations to folds
+kfold <- 5
+data <- data[sample(nrow(data)),]# shuffle the data
+data$folds <-
+  cut(seq(1, nrow(data)), breaks = kfold, labels = FALSE)
+
+cutoff <- 0.5
+overall_correctness <- 0.
+
+for (i in 1:kfold) {
+  train_objects <- data[data$folds != i,]
+  valid_objects <- data[data$folds == i,]
+  glmfit <-  glm(living ~ .,
+                 family = 'binomial',
+                 data = train_objects)
+  
+  valid_objects$predicted.value <-
+    predict(glmfit, valid_objects, type = 'response')
+  valid_objects$predicted.living <- 0
+  valid_objects$predicted.living[valid_objects$predicted.value > 0.5] <-
+    1
+  
+  valid_objects$correct <- FALSE
+  valid_objects$correct <-
+    valid_objects$living == valid_objects$predicted.living
+  summary(valid_objects$correct)
+  correctness <- mean(valid_objects$correct)
+  
+  # [1] "1 fold correct rate = 0.84375"
+  # [1] "2 fold correct rate = 0.9375"
+  # [1] "3 fold correct rate = 0.90625"
+  # [1] "4 fold correct rate = 0.90625"
+  # [1] "5 fold correct rate = 0.84375"
+  print(paste(i, 'fold correct rate =', correctness))
+  overall_correctness <- overall_correctness + correctness
+  
+}
+overall_correctness <- overall_correctness / kfold
+
+# [1] "Overall correctness = 0.8875"
+print(paste('Overall correctness =', overall_correctness))
+
+finish_task(task_number = 3,
+            reserved_varialbes = c('overall_correctness')) # save the correctness value for task 4
+
+# Task 4 ------------------------------------------------------------------
+start_task(task_number = 4)
+# constrct data frame
+living <-
+  sapply(feature_data$label, is_living, configuration = configuration)
+data <-  cbind.data.frame(feature_data,living)
+
+number_objects<-nrow(data)
+
+data$random.prediction<-0
+data$random.prediction[runif(number_objects,0,1)>0.5]<-1
+data$random.correct<-data$random.prediction==data$living
+random_correctness <- mean(data$random.correct)
+# "Random correctness = 0.475"
+print(paste('Random correctness =', random_correctness))
+
+number_correct_model<-number_objects*overall_correctness
+pvalue<-1-pbinom(number_correct_model,number_objects,random_correctness)
+
+# "p value is 0"
+print(paste('p value is',pvalue))
+finish_task(task_number = 4)
+# Task 5 ------------------------------------------------------------------
+start_task(task_number = 5) 
+finish_task(task_number = 5)
+
