@@ -1,4 +1,7 @@
 # Reference: https://raw.githubusercontent.com/github/gitignore/master/R.gitignore
+# cache files
+._*
+
 # History files
 .Rhistory
 .Rapp.history
