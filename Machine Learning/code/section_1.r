@@ -2,6 +2,7 @@
 
 
 
+
 # Set up ------------------------------------------------------------------
 start_section1 <- function() {
   print(paste(
@@ -10,6 +11,8 @@ start_section1 <- function() {
     strrep('-', times = 20)
   ))
   library(yaml)
+  library(e1071)
+  library(caret)
   library(ggplot2)
 }
 print_save <- function(output_directory, file_name, data) {
@@ -204,7 +207,7 @@ living <-
 data <-  cbind.data.frame(feature_data,    living)
 # Drop columns index and label
 
-data <- data[,!(names(data) %in% c('label', 'index'))]
+data <- data[, !(names(data) %in% c('label', 'index'))]
 
 
 lm_largest_pvalue_feature <- function(lm_model) {
@@ -228,8 +231,8 @@ for (i in 1:number_features_to_remove) {
   regression_model <- lm(living ~ ., data = data)
   
   invaluable_feature <- lm_largest_pvalue_feature(regression_model)
-  print(paste('dropping feature',invaluable_feature))
-  data <- data[, !(names(data) %in% invaluable_feature)]
+  print(paste('dropping feature', invaluable_feature))
+  data <- data[,!(names(data) %in% invaluable_feature)]
 }
 regression_model <- lm(living ~ ., data = data)
 print_save(output_dir,
@@ -242,16 +245,18 @@ names(data)
 
 # cross validation, assign observations to folds
 kfold <- 5
-data <- data[sample(nrow(data)),]# shuffle the data
+data <- data[sample(nrow(data)), ]# shuffle the data
 data$folds <-
   cut(seq(1, nrow(data)), breaks = kfold, labels = FALSE)
 
 cutoff <- 0.5
 overall_correctness <- 0.
 
+validation_result <- data.frame()
+
 for (i in 1:kfold) {
-  train_objects <- data[data$folds != i,]
-  valid_objects <- data[data$folds == i,]
+  train_objects <- data[data$folds != i, ]
+  valid_objects <- data[data$folds == i, ]
   glmfit <-  glm(living ~ .,
                  family = 'binomial',
                  data = train_objects)
@@ -276,38 +281,57 @@ for (i in 1:kfold) {
   print(paste(i, 'fold correct rate =', correctness))
   overall_correctness <- overall_correctness + correctness
   
+  # save the result for task 5
+  validation_result <-
+    rbind(
+      validation_result,
+      data.frame(
+        living = valid_objects$living,
+        prediction = valid_objects$predicted.living
+      )
+    )
 }
 overall_correctness <- overall_correctness / kfold
 
 # [1] "Overall correctness = 0.8875"
 print(paste('Overall correctness =', overall_correctness))
 
-finish_task(task_number = 3,
-            reserved_varialbes = c('overall_correctness')) # save the correctness value for task 4
+finish_task(
+  task_number = 3,
+  reserved_varialbes = c('overall_correctness', 'validation_result')
+) # save the correctness value for task 4
 
 # Task 4 ------------------------------------------------------------------
 start_task(task_number = 4)
 # constrct data frame
 living <-
   sapply(feature_data$label, is_living, configuration = configuration)
-data <-  cbind.data.frame(feature_data,living)
+data <-  cbind.data.frame(feature_data, living)
 
-number_objects<-nrow(data)
+number_objects <- nrow(data)
 
-data$random.prediction<-0
-data$random.prediction[runif(number_objects,0,1)>0.5]<-1
-data$random.correct<-data$random.prediction==data$living
+data$random.prediction <- 0
+data$random.prediction[runif(number_objects, 0, 1) > 0.5] <- 1
+data$random.correct <- data$random.prediction == data$living
 random_correctness <- mean(data$random.correct)
 # "Random correctness = 0.475"
 print(paste('Random correctness =', random_correctness))
 
-number_correct_model<-number_objects*overall_correctness
-pvalue<-1-pbinom(number_correct_model,number_objects,random_correctness)
+number_correct_model <- number_objects * overall_correctness
+pvalue <-
+  1 - pbinom(number_correct_model, number_objects, random_correctness)
 
 # "p value is 0"
-print(paste('p value is',pvalue))
-finish_task(task_number = 4)
+print(paste('p value is', pvalue))
+finish_task(task_number = 4,
+            reserved_varialbes = c('validation_result'))
 # Task 5 ------------------------------------------------------------------
-start_task(task_number = 5) 
-finish_task(task_number = 5)
+start_task(task_number = 5)
 
+prediction <- as.factor(validation_result$prediction)
+actual <- as.factor(validation_result$living)
+
+matrix <- confusionMatrix(prediction, actual)
+print_save(output_dir, 'validation result detail.txt', matrix)
+
+finish_task(task_number = 5)
