@@ -15,6 +15,14 @@ start_section1 <- function() {
   library(caret)
   library(ggplot2)
 }
+finish_section1<-function(){
+  print(paste(
+    strrep('-', times = 20),
+    "Section 1 Finished",
+    strrep('-', times = 20)
+  ))
+  rm(list= ls(envir = .GlobalEnv),envir = .GlobalEnv)
+}
 print_save <- function(output_directory, file_name, data) {
   output_file <- paste(output_directory, file_name, sep = '')
   print(data)
@@ -335,3 +343,5 @@ matrix <- confusionMatrix(prediction, actual)
 print_save(output_dir, 'validation result detail.txt', matrix)
 
 finish_task(task_number = 5)
+# Finish section 1  ------------------------------------------------------------------
+finish_section1()

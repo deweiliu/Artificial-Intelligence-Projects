@@ -1,2 +1,0 @@
-   Mode   FALSE    TRUE 
-logical      48     112 
