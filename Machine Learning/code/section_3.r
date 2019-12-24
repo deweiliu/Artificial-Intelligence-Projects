@@ -9,14 +9,13 @@ start_section3 <- function() {
     strrep('-', times = 20)
   ))
   library(yaml)
-  library(e1071)
   library(caret)
   library(ggplot2)
   library(class)
-  library(scales)
   library(rpart)
   library(randomForest)
   library(ipred)
+  library(vip)
   
 }
 finish_section3 <- function() {

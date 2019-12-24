@@ -3,3 +3,6 @@ output/*
 
 # intemediate data files
 cache/*
+
+# Plot figures
+Rplots.pdf
