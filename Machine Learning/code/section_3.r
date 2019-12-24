@@ -370,8 +370,10 @@ result <-
     kfold = 5
   )
 
+print_save(output_dir,'20 Accuracy values.txt',result)
 # Calculate meand and SD
-output<-paste('The mean of the accuracies is', mean(result),'\nThe standard deviation of the accuracies is', sd(result))
+output<-paste('The mean of the accuracies is', mean(result))
+output<-paste(output,'\nThe standard deviation of the accuracies is', sd(result))
 print_save(output_dir,'Mean and SD.txt',output,use_cat = TRUE)
 
 finish_task(3, reserved_varialbes = c('best_tune', 'result')) # save the result of the 8-feature model for task 4
@@ -385,6 +387,7 @@ data <- feature_data[, c(1, 3:10)] # extract data for this task
 kfold <- 5
 
 # Fit all 8 features int bagging trees with same 'number of trees' in task 3
+print("Analysing the importances of these 8 features using bagging trees. Please wait...")
 bag <- train(
   label ~ .,
   data = data,
@@ -430,24 +433,25 @@ print_save(output_dir, 'Accuracies summary.txt', summary(accuracies))
 
 # reference https://www.rdocumentation.org/packages/stats/versions/3.6.1/topics/t.test
 
-# H0 = 7-feature model significantly less accurate than the 8-feature model
-# HA = two models are the same accurate
+print('Performing T Test to these two groups of accuracies')
+H0<-'H0 = The true mean of the accuracies in these two models are the same'
+HA<-'HA = 7-feature model significantly less accurate than the 8-feature model'
+print(H0)
+print(HA)
 t_test <-
   t.test(
     x = accuracies$seven.feature,
     y = accuracies$eight.feature,
-    alternative = 'greater'
+    alternative = 'less'
   )
 print_save(output_dir, 'T Test result.txt', t_test, use_cat = FALSE)
 
+print('Conclusion:')
 if (t_test$p.value < 0.05) {
-  print('7-feature model significantly less accurate than the 8-feature model')
+  print(HA)
 } else{
-  print(
-    'We do not have evidence to reject H0 = 8 feature model is better'
-  )
+  print(H0  )
 }
 
 finish_task(4)
-
 finish_section3()
