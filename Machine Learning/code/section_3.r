@@ -16,6 +16,7 @@ start_section3 <- function() {
   library(randomForest)
   library(ipred)
   library(vip)
+  library(e1071)
   
 }
 finish_section3 <- function() {
